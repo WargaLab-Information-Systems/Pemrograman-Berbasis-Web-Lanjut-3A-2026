@@ -9,12 +9,11 @@ use Illuminate\Support\Facades\DB;
 
 class BukuWebController extends Controller
 {
-
-    public function cariRaw(\Illuminate\Http\Request $request)
+    // A2 Penambalan: Menggunakan Parameter Binding (?) -> AMAN dari SQL Injection
+    public function cariRaw(Request $request)
     {
         $judul = $request->query('judul');
-        // Menggabungkan string secara langsung (Vulnerable SQLi)
-        $buku = DB::select("SELECT * FROM bukus WHERE judul = '$judul'");
+        $buku = DB::select("SELECT * FROM bukus WHERE judul = ?", [$judul]);
         return response()->json($buku);
     }
 
@@ -31,8 +30,8 @@ class BukuWebController extends Controller
             });
         }
 
-        $bukus = $query->get(); // Mengambil data buku langsung dari DB
-        $kategoris = Kategori::all(); // Mengambil kategori dari DB
+        $bukus = $query->get();
+        $kategoris = Kategori::all();
 
         return view('buku.index', compact('bukus', 'kategoris'));
     }
@@ -61,8 +60,6 @@ class BukuWebController extends Controller
 
         return redirect()->route('buku.index')->with('success', 'Buku berhasil ditambahkan!');
     }
-
-    // Detail Buku
 
     // Form Edit Buku
     public function edit(int $id)
@@ -98,21 +95,12 @@ class BukuWebController extends Controller
         return redirect()->route('buku.index')->with('success', 'Buku berhasil diperbarui!');
     }
 
-    // Hapus Buku
+    // Hapus Buku (Aman dengan Proteksi CSRF + Method DELETE)
     public function destroy(int $id)
     {
         $buku = Buku::findOrFail($id);
         $buku->delete();
 
         return redirect()->route('buku.index')->with('success', 'Buku berhasil dihapus!');
-    }
-
-
-    public function destroyGet($id)
-    {
-        $buku = Buku::findOrFail($id);
-        $buku->delete();
-
-        return redirect()->route('buku.index')->with('success', 'Buku berhasil dihapus via GET');
     }
 }

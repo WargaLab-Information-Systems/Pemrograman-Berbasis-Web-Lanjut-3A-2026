@@ -113,7 +113,7 @@
                                         {{ $buku->kategori->nama ?? 'Umum' }}
                                     </span>
                                 </td>
-                                <td class="py-4 px-4 font-bold text-white">{!! $buku->judul !!}</td>
+                                <td class="py-4 px-4 font-bold text-white">{{ $buku->judul }}</td>
                                 <td class="py-4 px-4 text-slate-400 text-xs">{{ $buku->penulis }}</td>
                                 <td class="py-4 px-4 text-slate-400 text-xs">{{ $buku->tahun_terbit }}</td>
                                 <td class="py-4 px-4 text-right space-x-1">

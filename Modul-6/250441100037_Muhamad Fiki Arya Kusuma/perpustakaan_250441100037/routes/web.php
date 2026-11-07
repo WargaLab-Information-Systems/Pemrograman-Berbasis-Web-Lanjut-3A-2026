@@ -15,7 +15,6 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     // ROUTE CELAH KEAMANAN SOAL 1 (VULNERABLE STATE)
     Route::get('/buku-cari', [BukuWebController::class, 'cariRaw']);
-    Route::get('/buku/{id}/hapus', [BukuWebController::class, 'destroyGet']);
 
     // DASHBOARD & PROFIL
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

@@ -10,11 +10,24 @@ use Carbon\Carbon;
 
 class PeminjamanController extends Controller
 {
-    // SOAL 1 A4: CELAH IDOR (Menampilkan detail peminjaman tanpa cek kepemilikan)
+    // SOAL 2 A4: PENAMBALAN IDOR (Cek Kepemilikan & Role)
+// SOAL 2 A4: PENAMBALAN IDOR (Cek Kepemilikan & Role)
     public function show($id)
     {
-        // Mengambil data peminjaman beserta relasi user & buku
-        $peminjaman = Peminjaman::with(['user', 'buku'])->findOrFail($id);
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        // Pengecekan role aman dari peringatan Intelephense
+        if ($user && $user->hasRole('siswa')) {
+            $peminjaman = Peminjaman::with(['user', 'buku'])
+                ->where('id', $id)
+                ->where('user_id', $user->id)
+                ->firstOrFail(); // Mengembalikan 404 jika diakses siswa lain
+        } else {
+            // Admin dan Petugas tetap dapat melihat semua detail peminjaman
+            $peminjaman = Peminjaman::with(['user', 'buku'])->findOrFail($id);
+        }
+
         return view('peminjaman.show', compact('peminjaman'));
     }
 

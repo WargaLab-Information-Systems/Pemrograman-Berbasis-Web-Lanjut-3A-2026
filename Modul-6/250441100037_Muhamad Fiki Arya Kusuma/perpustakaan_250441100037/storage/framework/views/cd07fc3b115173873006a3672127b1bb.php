@@ -117,7 +117,7 @@
 
                                     </span>
                                 </td>
-                                <td class="py-4 px-4 font-bold text-white"><?php echo $buku->judul; ?></td>
+                                <td class="py-4 px-4 font-bold text-white"><?php echo e($buku->judul); ?></td>
                                 <td class="py-4 px-4 text-slate-400 text-xs"><?php echo e($buku->penulis); ?></td>
                                 <td class="py-4 px-4 text-slate-400 text-xs"><?php echo e($buku->tahun_terbit); ?></td>
                                 <td class="py-4 px-4 text-right space-x-1">
