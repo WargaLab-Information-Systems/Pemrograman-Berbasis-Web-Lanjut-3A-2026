@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Gate;
 use App\Models\Peminjaman;
 use Illuminate\Http\Request;
 
@@ -119,9 +120,10 @@ class PeminjamanController extends Controller
     {
         $peminjaman = Peminjaman::findOrFail($id);
 
+        Gate::authorize('view', $peminjaman);
+
         return view('peminjaman.show', [
             'peminjaman' => $peminjaman
         ]);
     }
-
 }
