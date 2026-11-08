@@ -20,10 +20,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
 // Daftar dan Detail Buku
 Route::middleware(['auth', 'permission:lihat daftar buku'])->group(function () {
     Route::get('/buku', [BukuController::class, 'daftarbuku'])
         ->name('buku.index');
+
+    Route::get('/buku/create', function () {
+        return redirect()->route('buku.index');
+    })->middleware('can:kelola-buku');
 
     Route::get('/buku/{id}', [BukuController::class, 'show'])
         ->name('buku.show');
@@ -152,4 +157,6 @@ Route::middleware(['auth', 'can:kelola-buku'])->group(function () {
 
 
 Route::get('/peminjaman/{id}', [PeminjamanController::class, 'show'])
+    ->middleware('auth')
     ->name('peminjaman.show');
+
