@@ -136,7 +136,8 @@ Route::get('/buku-cari', function () {
     $judul = request('judul');
 
     $hasil = DB::select(
-        "SELECT * FROM bukus WHERE judul = '$judul'"
+        'SELECT * FROM bukus WHERE judul = ?',
+        [$judul]
     );
 
     return response()->json($hasil);
@@ -144,10 +145,11 @@ Route::get('/buku-cari', function () {
 
 
 
-Route::get('/buku/{id}/hapus', [BukuController::class, 'destroy'])
-    ->name('buku.hapus');
+Route::middleware(['auth', 'can:kelola-buku'])->group(function () {
+    Route::delete('/buku/{id}', [BukuController::class, 'destroy'])
+        ->name('buku.destroy');
+});
 
 
 Route::get('/peminjaman/{id}', [PeminjamanController::class, 'show'])
     ->name('peminjaman.show');
-
