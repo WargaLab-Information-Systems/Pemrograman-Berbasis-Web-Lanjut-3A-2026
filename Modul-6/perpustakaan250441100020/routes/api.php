@@ -25,7 +25,7 @@ Route::middleware(['auth:sanctum', 'permission:lihat laporan perpustakaan'])->gr
 
 });
 
-Route::middleware(['auth:sanctum', 'permission:kelola data buku'])->group(function () {
+Route::middleware(['auth:sanctum', 'can:kelola-buku'])->group(function () {
     Route::get('/kategori', function () {
         return response()->json(
             Kategori::select('id', 'nama')->get()
@@ -41,7 +41,8 @@ Route::middleware(['auth:sanctum', 'permission:lihat daftar buku'])->group(funct
 });
 
 // Mengelola data buku
-Route::middleware(['auth:sanctum', 'permission:kelola data buku'])->group(function () {
+// Mengelola data buku
+Route::middleware(['auth:sanctum', 'can:kelola-buku'])->group(function () {
     Route::post('/buku', [BukuController::class, 'store']);
     Route::put('/buku/{buku}', [BukuController::class, 'update']);
     Route::patch('/buku/{buku}', [BukuController::class, 'update']);

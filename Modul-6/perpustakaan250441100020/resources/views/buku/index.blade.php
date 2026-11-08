@@ -19,7 +19,7 @@
     @endif
 </div>
 
-@can('kelola data buku')
+@can('kelola-buku')
 <h3>Tambah Buku</h3>
 
 <form id="form-buku">
@@ -89,7 +89,7 @@
 
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-    const bolehKelolaBuku = @json(auth() -> user() -> can('kelola data buku'));
+    const bolehKelolaBuku = @json(auth() -> user() -> can('kelola-buku'));
 
     const bolehMengajukan = @json(auth() -> user() -> can('mengajukan peminjaman buku'));
 
