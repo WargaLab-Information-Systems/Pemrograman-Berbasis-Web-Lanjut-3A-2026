@@ -52,15 +52,15 @@ class BukuController extends Controller
         return view('buku.index', compact('buku'));
     }
 
-    public function show(int $id)
+    public function show($id)
     {
         $buku = $this->getBuku();
+
         $bukuDetail = null;
 
         foreach ($buku as $item) {
             if ($item['id'] == $id) {
                 $bukuDetail = $item;
-                break;
             }
         }
 
