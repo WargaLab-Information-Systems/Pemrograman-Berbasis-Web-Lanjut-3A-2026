@@ -361,7 +361,7 @@
                         {{ $item->kategori->nama ?? '-' }}
                     </span>
 
-                    <h3>{!! $item->judul !!}</h3>
+                    <h3>{{ $item->judul }}</h3>
 
                     <p class="book-author">
                         Oleh {{ $item->penulis }}
@@ -717,21 +717,18 @@
 
         try {
             const response = await fetch(
-                `${API_URL}/${encodeURIComponent(id)}`,
+                `/buku/${encodeURIComponent(id)}`,
                 {
                     method: 'DELETE',
                     headers: {
                         'Accept': 'application/json',
-                        'X-CSRF-TOKEN': CSRF_TOKEN
+                        'X-CSRF-TOKEN': CSRF_TOKEN,
+                        'X-Requested-With': 'XMLHttpRequest'
                     }
                 }
             );
 
             const hasil = await bacaRespons(response);
-
-            if (String(bukuId.value) === String(id)) {
-                resetForm();
-            }
 
             tampilkanPesan(
                 hasil.message || 'Buku berhasil dihapus.'

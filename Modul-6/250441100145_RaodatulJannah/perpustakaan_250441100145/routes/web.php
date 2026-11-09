@@ -214,11 +214,13 @@ Route::get('/buku-cari', [
     'cari'
 ])->middleware('auth')->name('buku.cari');
 
-// A3 - Pengujian penghapusan melalui GET
-Route::get('/buku/{buku}/hapus', [
+Route::delete('/buku/{buku}', [
     ApiBukuController::class,
     'destroy'
-])->middleware('auth')->name('buku.hapus.get');
+])->middleware([
+    'auth',
+    'permission:manage books'
+])->name('buku.destroy');
 
 // A4 - Detail peminjaman
 Route::get('/peminjaman/{id}', [
