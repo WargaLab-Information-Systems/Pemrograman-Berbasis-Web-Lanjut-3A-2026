@@ -290,7 +290,7 @@
     <div id="apiMessage" class="api-message" role="alert"></div>
 
     {{-- Form tambah dan ubah buku hanya untuk Admin/Petugas --}}
-    @can('manage books')
+    @can('kelola-buku')
     <div class="api-form">
         <h3 id="formTitle">Tambah Buku</h3>
 
@@ -350,7 +350,7 @@
     <div
         id="bookList"
         class="book-grid"
-        data-kelola="{{ auth()->user()->can('manage books') ? '1' : '0' }}"
+        data-kelola="{{ auth()->user()->can('kelola-buku') ? '1' : '0' }}"
         data-pinjam="{{ auth()->user()->hasRole('siswa') && auth()->user()->can('request book loans') ? '1' : '0' }}"
         data-csrf="{{ csrf_token() }}">
 

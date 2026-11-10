@@ -8,7 +8,7 @@ Route::apiResource('buku', BukuController::class)
     ->names('api.buku')
     ->middleware('auth:sanctum')
     ->middlewareFor(['index', 'show'], 'permission:view books')
-    ->middlewareFor(['store', 'update', 'destroy'], 'permission:manage books');
+    ->middlewareFor(['store', 'update', 'destroy'], 'can:kelola-buku');
 
 Route::get('/rekap/buku-per-kategori', [RekapController::class, 'bukuPerKategori'])
     ->middleware(['auth:sanctum', 'permission:view library reports']);

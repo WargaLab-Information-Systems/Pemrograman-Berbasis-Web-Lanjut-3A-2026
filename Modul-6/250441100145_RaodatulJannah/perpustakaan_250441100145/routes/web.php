@@ -201,6 +201,14 @@ Route::middleware([
         'index'
     ])->name('buku.index');
 
+    // Form tambah buku hanya untuk Admin dan Petugas
+    Route::get('/buku/create', function () {
+        return redirect()->route('buku.index');
+    })->middleware([
+        'auth',
+        'can:kelola-buku'
+    ])->name('buku.create');
+
     Route::get('/buku/{id}', [
         BukuController::class,
         'show'
@@ -219,7 +227,7 @@ Route::delete('/buku/{buku}', [
     'destroy'
 ])->middleware([
     'auth',
-    'permission:manage books'
+    'can:kelola-buku'
 ])->name('buku.destroy');
 
 // A4 - Detail peminjaman
