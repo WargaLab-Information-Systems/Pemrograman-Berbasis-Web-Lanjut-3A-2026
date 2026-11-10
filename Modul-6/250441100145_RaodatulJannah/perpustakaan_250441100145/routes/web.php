@@ -301,5 +301,9 @@ Route::middleware([
 | AUTHENTICATION BREEZE
 |--------------------------------------------------------------------------
 */
+// // Pengujian Soal 5A - APP_DEBUG
+// Route::get('/uji-error-keamanan', function () {
+//     throw new \RuntimeException('Pengujian error internal Modul VI');
+// });
 
 require __DIR__.'/auth.php';
