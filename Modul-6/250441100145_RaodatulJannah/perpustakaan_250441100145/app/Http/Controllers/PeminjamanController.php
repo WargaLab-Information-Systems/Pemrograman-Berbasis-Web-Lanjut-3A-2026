@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Peminjaman;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PeminjamanController extends Controller
 {
@@ -78,11 +79,13 @@ class PeminjamanController extends Controller
             ->with('success', 'Status peminjaman berhasil diperbarui.');
     }
 
-    // A4 - Detail peminjaman (IDOR)
+    // A4 -  Detail peminjaman menggunakan Policy
     public function show(string $id)
     {
         $peminjaman = Peminjaman::with(['buku', 'anggota'])
             ->findOrFail($id);
+
+        Gate::authorize('view', $peminjaman);
 
         return view('peminjaman.show', compact('peminjaman'));
     }
