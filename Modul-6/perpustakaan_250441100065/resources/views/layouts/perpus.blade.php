@@ -26,7 +26,7 @@
                         <a href="{{ route('buku.index') }}">Daftar Buku IT</a>
                     @endcan
 
-                    @can('kelola data buku')
+                    @can('kelola-buku')
                         <a href="{{ route('buku.kelola') }}">Kelola Buku</a>
                     @endcan
 

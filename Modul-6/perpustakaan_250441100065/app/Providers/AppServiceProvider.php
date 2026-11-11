@@ -23,5 +23,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Gate::policy(User::class, UserPolicy::class);
+
+        // [SOAL 3] Aturan pengelolaan buku dipusatkan di SATU tempat.
+        // Hanya role admin dan petugas yang boleh menambah, mengubah, dan menghapus buku.
+        Gate::define('kelola-buku', function (User $user) {
+            return $user->hasAnyRole(['admin', 'petugas']);
+        });
     }
 }

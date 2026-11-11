@@ -4,7 +4,7 @@
 
 <h2 class="page-title">Daftar Buku IT</h2>
 
-@can('kelola data buku')
+@can('kelola-buku')
     <div class="page-actions">
         <a href="{{ route('buku.create') }}" class="btn btn-green">+ Tambah Buku</a>
     </div>
@@ -34,7 +34,7 @@
             <x-slot:button>
                 <a href="{{ route('buku.show', $b->id) }}" class="btn btn-sm">Detail</a>
 
-                @can('kelola data buku')
+                @can('kelola-buku')
                     <a href="{{ route('buku.edit', $b->id) }}" class="btn btn-sm btn-yellow">Ubah</a>
 
                     {{-- Penghapusan: method DELETE + token CSRF --}}

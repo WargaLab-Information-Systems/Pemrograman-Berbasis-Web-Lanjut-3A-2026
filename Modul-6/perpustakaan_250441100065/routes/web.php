@@ -50,7 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/peminjaman/{id}', [PeminjamanController::class, 'show'])->name('peminjaman.show');
 
     // ---- Kelola buku lewat form web (tambah, ubah, hapus) ----
-    Route::middleware('permission:kelola data buku')->group(function () {
+    Route::middleware('can:kelola-buku')->group(function () {
         Route::get('/buku/create', [BukuController::class, 'create'])->name('buku.create');
         Route::post('/buku', [BukuController::class, 'store'])->name('buku.store');
         Route::get('/buku/{buku}/edit', [BukuController::class, 'edit'])->whereNumber('buku')->name('buku.edit');
@@ -79,7 +79,7 @@ Route::middleware('auth')->group(function () {
     // ---- Operasional perpustakaan : admin & petugas ----
     Route::prefix('kelola')->group(function () {
         Route::get('/buku', [BukuController::class, 'kelola'])
-            ->middleware('permission:kelola data buku')->name('buku.kelola');
+            ->middleware('can:kelola-buku')->name('buku.kelola');
 
         Route::get('/peminjaman', [PeminjamanController::class, 'index'])
             ->middleware('permission:kelola peminjaman')->name('kelola.peminjaman');
