@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Buku;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class BukuController extends Controller
 {
@@ -51,18 +50,5 @@ class BukuController extends Controller
         $kategoris = Kategori::all();
 
         return view('buku.kelola', compact('kategoris'));
-    }
-
-    /**
-     * [SOAL 1 - CELAH A2] SQL Injection.
-     * Nilai "judul" dari query string digabung LANGSUNG ke string SQL.
-     */
-    public function cari(Request $request)
-    {
-        $judul = $request->query('judul');
-
-        $hasil = DB::select("SELECT * FROM bukus WHERE judul = '$judul'");
-
-        return response()->json($hasil);
     }
 }
