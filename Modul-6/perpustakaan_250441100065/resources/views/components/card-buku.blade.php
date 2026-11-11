@@ -1,6 +1,6 @@
 <div class="book-card">
 
-    <h3>{{ $judul }}</h3>
+    <h3>{!! $judul !!}</h3>
 
     <p>
         <strong>Penulis:</strong>

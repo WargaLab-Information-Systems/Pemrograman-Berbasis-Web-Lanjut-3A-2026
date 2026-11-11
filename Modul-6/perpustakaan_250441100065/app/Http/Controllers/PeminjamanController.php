@@ -10,6 +10,20 @@ use Illuminate\Support\Facades\Gate;
 
 class PeminjamanController extends Controller
 {
+    /**
+     * [SOAL 1 - CELAH A4] IDOR.
+     * Data diambil langsung dengan findOrFail($id) TANPA memeriksa pemiliknya.
+     */
+    public function show($id)
+    {
+        $peminjaman = Peminjaman::findOrFail($id);
+
+        return view('peminjaman.show', compact('peminjaman'));
+    }
+
+    /* =====================  SISI PENGGUNA (milik sendiri)  =====================
+
+    /** Mengajukan peminjaman buku (semua role). */
     public function ajukan(Request $request, Buku $buku)
     {
         $anggota = $request->user()->ensureAnggota();
@@ -34,6 +48,7 @@ class PeminjamanController extends Controller
         return back()->with('status', 'Pengajuan peminjaman buku "'.$buku->judul.'" terkirim. Menunggu persetujuan petugas.');
     }
 
+    /** Status peminjaman milik sendiri (yang masih berjalan). */
     public function saya(Request $request)
     {
         $data = Peminjaman::with('buku.kategori')
@@ -45,14 +60,16 @@ class PeminjamanController extends Controller
         return view('peminjaman.saya', compact('data'));
     }
 
+    /** /riwayat-peminjaman -> selalu diarahkan ke riwayat milik sendiri. */
     public function riwayatSaya(Request $request)
     {
         return redirect()->route('riwayat.show', $request->user());
     }
 
+    /** Riwayat peminjaman seorang user. Dibatasi berdasarkan IDENTITAS (lihat UserPolicy). */
     public function riwayat(Request $request, User $user)
     {
-        Gate::authorize('viewRiwayat', $user);
+        Gate::authorize('viewRiwayat', $user); // 403 kalau bukan miliknya (dan bukan staf)
 
         $data = Peminjaman::with('buku.kategori')
             ->milikUser($user->id)
@@ -62,7 +79,9 @@ class PeminjamanController extends Controller
         return view('peminjaman.riwayat', ['data' => $data, 'pemilik' => $user]);
     }
 
-   
+    /* =====================  SISI STAF (admin & petugas)  ===================== */
+
+    /** Semua data peminjaman + pengajuan yang menunggu persetujuan. */
     public function index(Request $request)
     {
         $query = Peminjaman::with(['anggota', 'buku'])->latest();
