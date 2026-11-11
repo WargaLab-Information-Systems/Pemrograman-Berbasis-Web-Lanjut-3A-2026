@@ -46,7 +46,7 @@ Route::middleware('auth')->group(function () {
     // A2 (SQL Injection) -> query memakai binding
     Route::get('/buku-cari', [BukuController::class, 'cari'])->name('buku.cari');
     // A3 (CSRF) -> route GET /buku/{buku}/hapus DIHAPUS; penghapusan kini lewat DELETE (lihat di bawah)
-    // A4 (IDOR) -> lihat Soal 4 (Policy)
+    // A4 (IDOR) -> ditutup dengan PeminjamanPolicy (Gate::authorize di method show)
     Route::get('/peminjaman/{id}', [PeminjamanController::class, 'show'])->name('peminjaman.show');
 
     // ---- Kelola buku lewat form web (tambah, ubah, hapus) ----

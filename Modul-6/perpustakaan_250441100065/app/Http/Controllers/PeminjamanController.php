@@ -11,12 +11,14 @@ use Illuminate\Support\Facades\Gate;
 class PeminjamanController extends Controller
 {
     /**
-     * [SOAL 1 - CELAH A4] IDOR.
-     * Data diambil langsung dengan findOrFail($id) TANPA memeriksa pemiliknya.
+     * [SOAL 4 - DITAMBAL] IDOR ditutup dengan Policy.
+     * Gate::authorize('view', ...) memanggil PeminjamanPolicy@view -> 403 jika bukan haknya.
      */
     public function show($id)
     {
         $peminjaman = Peminjaman::findOrFail($id);
+
+        Gate::authorize('view', $peminjaman);
 
         return view('peminjaman.show', compact('peminjaman'));
     }
