@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Api\BukuController as ApiBukuController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LaporanController;
@@ -43,16 +42,21 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])
         ->middleware('permission:ubah profil sendiri')->name('profile.update');
 
-    // =====================================================================
-    // SOAL 1 - CELAH KEAMANAN YANG SENGAJA DIBUAT (hanya untuk latihan lokal!)
-    // =====================================================================
-    // A2: SQL Injection
+    // ---- Celah Soal 1 yang sudah ditambal ----
+    // A2 (SQL Injection) -> query memakai binding
     Route::get('/buku-cari', [BukuController::class, 'cari'])->name('buku.cari');
-    // A3: CSRF - penghapusan lewat method GET
-    Route::get('/buku/{buku}/hapus', [ApiBukuController::class, 'destroy'])->name('buku.hapus');
-    // A4: IDOR - tidak ada pemeriksaan pemilik
+    // A3 (CSRF) -> route GET /buku/{buku}/hapus DIHAPUS; penghapusan kini lewat DELETE (lihat di bawah)
+    // A4 (IDOR) -> lihat Soal 4 (Policy)
     Route::get('/peminjaman/{id}', [PeminjamanController::class, 'show'])->name('peminjaman.show');
-    // =====================================================================
+
+    // ---- Kelola buku lewat form web (tambah, ubah, hapus) ----
+    Route::middleware('permission:kelola data buku')->group(function () {
+        Route::get('/buku/create', [BukuController::class, 'create'])->name('buku.create');
+        Route::post('/buku', [BukuController::class, 'store'])->name('buku.store');
+        Route::get('/buku/{buku}/edit', [BukuController::class, 'edit'])->whereNumber('buku')->name('buku.edit');
+        Route::put('/buku/{buku}', [BukuController::class, 'update'])->whereNumber('buku')->name('buku.update');
+        Route::delete('/buku/{buku}', [BukuController::class, 'destroy'])->whereNumber('buku')->name('buku.destroy');
+    });
 
     // ---- Buku (baca) : semua role ----
     Route::get('/buku', [BukuController::class, 'index'])

@@ -337,10 +337,15 @@
         document.getElementById('cancelBtn').style.display = 'none';
     }
 
+    // mengubah karakter berbahaya (< > & " ') menjadi teks biasa
+    function escapeHtml(teks) {
+        return String(teks).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+    }
+
     async function deleteBuku(id, judul) {
         const konfirmasi = await Swal.fire({
             title: 'Hapus Buku?',
-            html: `Apakah kamu yakin ingin menghapus buku <b>"${judul}"</b>? Data ini tidak bisa dikembalikan.`,
+            html: `Apakah kamu yakin ingin menghapus buku <b>"${escapeHtml(judul)}"</b>? Data ini tidak bisa dikembalikan.`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#ef4444',

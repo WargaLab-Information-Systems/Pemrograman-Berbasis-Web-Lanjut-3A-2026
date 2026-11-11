@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBukuRequest;
+use App\Http\Requests\UpdateBukuRequest;
 use App\Models\Buku;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
@@ -54,15 +56,49 @@ class BukuController extends Controller
     }
 
     /**
-     * [SOAL 1 - CELAH A2] SQL Injection.
-     * Nilai "judul" dari query string digabung LANGSUNG ke string SQL.
+     * [SOAL 2b - DITAMBAL] Pencarian memakai query binding.
+     * Nilai "judul" dikirim sebagai parameter (?), bukan digabung ke string SQL.
      */
     public function cari(Request $request)
     {
         $judul = $request->query('judul');
 
-        $hasil = DB::select("SELECT * FROM bukus WHERE judul = '$judul'");
+        $hasil = DB::select('SELECT * FROM bukus WHERE judul = ?', [$judul]);
 
         return response()->json($hasil);
+    }
+
+    /* ---------- [SOAL 2c] CRUD buku lewat form web (dilindungi CSRF) ---------- */
+
+    public function create()
+    {
+        return view('buku.form', ['buku' => new Buku(), 'kategoris' => Kategori::orderBy('nama')->get()]);
+    }
+
+    public function store(StoreBukuRequest $request)
+    {
+        Buku::create($request->validated());
+
+        return redirect()->route('buku.index')->with('status', 'Buku berhasil ditambahkan.');
+    }
+
+    public function edit(Buku $buku)
+    {
+        return view('buku.form', ['buku' => $buku, 'kategoris' => Kategori::orderBy('nama')->get()]);
+    }
+
+    public function update(UpdateBukuRequest $request, Buku $buku)
+    {
+        $buku->update($request->validated());
+
+        return redirect()->route('buku.index')->with('status', 'Buku berhasil diperbarui.');
+    }
+
+    /** Penghapusan HANYA lewat method DELETE (form dengan @csrf dan @method('DELETE')). */
+    public function destroy(Buku $buku)
+    {
+        $buku->delete();
+
+        return redirect()->route('buku.index')->with('status', 'Buku berhasil dihapus.');
     }
 }

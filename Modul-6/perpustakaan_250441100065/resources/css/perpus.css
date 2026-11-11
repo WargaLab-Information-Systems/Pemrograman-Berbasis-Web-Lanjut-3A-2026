@@ -709,3 +709,14 @@ ul.pagination li.active span {
 ul.pagination li.disabled span {
     opacity: 0.5;
 }
+
+/* Tombol aksi pada kartu buku (Modul 6) */
+.btn-yellow { background-color: #d97706; }
+.btn-yellow:hover { background-color: #b45309; }
+.btn-red { background-color: #dc2626; }
+.btn-red:hover { background-color: #b91c1c; }
+.btn, button.btn { border: none; cursor: pointer; font-family: inherit; }
+.page-actions { width: 90%; max-width: 1100px; margin: 0 auto 16px; display: flex; justify-content: flex-end; }
+.form-card { width: 90%; max-width: 640px; margin: 0 auto 40px; background: #fff; border-radius: 14px; padding: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+.form-card .mgmt-form-group { margin-bottom: 16px; }
+.form-error { color: #b91c1c; font-size: 13px; margin-top: 4px; }
